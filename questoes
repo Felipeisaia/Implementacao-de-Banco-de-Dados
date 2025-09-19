@@ -1,0 +1,128 @@
+1) O que é ordenação e por que é importante?
+
+Ordenação significa organizar os elementos de uma coleção em uma ordem específica (ex.: crescente ou decrescente). Isso é útil porque:
+
+Acelera buscas e consultas (ex.: pesquisa binária).
+
+Facilita análises (mínimos, máximos, medianas, padrões).
+
+Simplifica outras tarefas como eliminar duplicatas ou mesclar listas.
+
+2) Estabilidade e complexidade
+
+Estabilidade: um algoritmo é estável se mantém a ordem relativa de elementos iguais.
+Exemplo: se Ana(30) vem antes de Bia(30), um método estável não inverte essa ordem.
+
+Complexidade: descreve o custo de execução em função do tamanho da entrada n. Usamos Big-O:
+
+O(1): constante
+
+O(log n): cresce muito devagar
+
+O(n): linear
+
+O(n log n): bastante eficiente
+
+O(n²): cresce rápido demais; ruim para entradas grandes
+
+➡️ Estáveis: Bolha, Inserção, Agitação
+➡️ Instáveis: Seleção, Pente, Shell
+
+3) Complexidade de alguns métodos
+
+Bolha (Bubble Sort)
+
+Tempo: pior/médio O(n²), melhor O(n) com parada antecipada
+
+Espaço: O(1)
+
+Observação: simples, estável
+
+Seleção (Selection Sort)
+
+Tempo: sempre O(n²) em comparações
+
+Trocas: poucas (≤ n−1)
+
+Observação: instável
+
+Inserção (Insertion Sort)
+
+Tempo: pior/médio O(n²), melhor O(n)
+
+Ótimo para listas pequenas ou quase ordenadas
+
+Observação: estável
+
+Agitação (Cocktail/Shaker)
+
+Varre nos dois sentidos
+
+Tempo: pior/médio O(n²), melhor O(n)
+
+Estável
+
+Pente (Comb Sort)
+
+Usa “gaps” que vão diminuindo (~1,3)
+
+Tempo: em média próximo a O(n²) mas pode chegar a O(n log n) em cenários favoráveis
+
+Instável
+
+Shell Sort
+
+Complexidade depende da sequência de gaps; na prática ~O(n^1.3)
+
+Instável
+
+Normalmente o mais rápido dos estudados para vetores grandes
+
+4) Qual é o “melhor”?
+
+Listas pequenas ou quase ordenadas → Inserção ou Agitação
+
+Necessidade de estabilidade → Inserção, Bolha ou Agitação
+
+Listas grandes, sem restrição de estabilidade → Shell Sort (com bons gaps)
+
+Poucas trocas desejadas → Seleção
+
+5) Função para verificar se está ordenado (Python)
+def esta_ordenada(lista):
+    return all(lista[i] <= lista[i+1] for i in range(len(lista)-1))
+
+6) Exemplo de contagem (sequência [30, 90, 10, 20, 80, 10, 20, 40, 10])
+
+Bolha: 35 comparações, 20 trocas
+
+Pente: 37 comparações, 8 trocas
+
+Seleção: 36 comparações, 6 trocas
+
+(valores podem mudar conforme detalhes da implementação)
+
+7) Implementação do Comb Sort (Python)
+def comb_sort(lista):
+    gap = len(lista)
+    houve_troca = True
+    while gap > 1 or houve_troca:
+        gap = max(1, (gap * 10) // 13)  # diminui o gap (~1.3)
+        houve_troca = False
+        for i in range(len(lista) - gap):
+            if lista[i] > lista[i + gap]:
+                lista[i], lista[i + gap] = lista[i + gap], lista[i]
+                houve_troca = True
+    return lista
+
+8) Ordenação por múltiplas chaves (ex.: curso e depois nome)
+from dataclasses import dataclass
+
+@dataclass
+class Aluno:
+    codigo: int
+    curso: str
+    nome: str
+
+def ordenar_por_curso_nome(lista):
+    lista.sort(key=lambda aluno: (aluno.curso, aluno.nome))
